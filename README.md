@@ -70,7 +70,7 @@ python3 -m pip install -e .
 From GitHub:
 
 ```bash
-python3 -m pip install "git+https://github.com/<your-user>/RDStoH5AD.git"
+python3 -m pip install "git+https://github.com/christoffermattssonlangseth/RDStoH5AD.git"
 ```
 
 ## Usage
