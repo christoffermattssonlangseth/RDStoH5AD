@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rdstoh5ad"
+version = "0.1.0"
+description = "Convert RDS-backed single-cell objects to H5AD using an R backend and a Python CLI."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "Chris Langseth" }
+]
+dependencies = []
+keywords = ["rds", "h5ad", "seurat", "singlecellexperiment", "anndata", "spatial-transcriptomics"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: R",
+  "Environment :: Console",
+  "Operating System :: OS Independent",
+  "Topic :: Scientific/Engineering :: Bio-Informatics"
+]
+
+[project.scripts]
+rds2h5ad = "rdstoh5ad.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+rdstoh5ad = ["r/*.R"]
