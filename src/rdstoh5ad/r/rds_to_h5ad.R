@@ -332,14 +332,7 @@ extract_spatial_matrix <- function(x) {
   NULL
 }
 
-normalize_reduced_dim_names <- function(matrix_value, prefix) {
-  if (is.null(colnames(matrix_value))) {
-    colnames(matrix_value) <- sprintf("%s_%d", prefix, seq_len(ncol(matrix_value)))
-  }
-  matrix_value
-}
-
-normalize_spatial_for_obsm <- function(matrix_value) {
+normalize_obsm_matrix <- function(matrix_value) {
   matrix_value <- as.matrix(matrix_value)
   colnames(matrix_value) <- NULL
   matrix_value
@@ -356,13 +349,13 @@ extract_sce_reduced_dims <- function(x, requested = NULL, include_spatial = TRUE
     if (!is_non_empty_matrix(matrix_value)) {
       next
     }
-    out[[rd_name]] <- normalize_reduced_dim_names(as.matrix(matrix_value), rd_name)
+    out[[rd_name]] <- normalize_obsm_matrix(matrix_value)
   }
 
   if (include_spatial && !("spatial" %in% names(out))) {
     spatial <- extract_spatial_matrix(x)
     if (!is.null(spatial)) {
-      out[["spatial"]] <- normalize_spatial_for_obsm(spatial)
+      out[["spatial"]] <- normalize_obsm_matrix(spatial)
     }
   }
   out
@@ -380,13 +373,13 @@ extract_seurat_reduced_dims <- function(x, requested = NULL, include_spatial = T
     if (is.null(matrix_value)) {
       next
     }
-    out[[reduction_name]] <- normalize_reduced_dim_names(as.matrix(matrix_value), reduction_name)
+    out[[reduction_name]] <- normalize_obsm_matrix(matrix_value)
   }
 
   if (include_spatial && !("spatial" %in% names(out))) {
     spatial <- extract_spatial_matrix(x)
     if (!is.null(spatial)) {
-      out[["spatial"]] <- normalize_spatial_for_obsm(spatial)
+      out[["spatial"]] <- normalize_obsm_matrix(spatial)
     }
   }
   out
@@ -426,10 +419,10 @@ build_sce_from_list <- function(x, x_layer_name = NULL, requested_layers = NULL,
   )
 
   if (!is.null(x$umap) && (is.null(requested_reduced_dims) || "UMAP" %in% requested_reduced_dims)) {
-    SingleCellExperiment::reducedDim(sce, "UMAP") <- as.matrix(x$umap)
+    SingleCellExperiment::reducedDim(sce, "UMAP") <- normalize_obsm_matrix(x$umap)
   }
   if (include_spatial && !is.null(x$coordinates)) {
-    SingleCellExperiment::reducedDim(sce, "spatial") <- normalize_spatial_for_obsm(x$coordinates)
+    SingleCellExperiment::reducedDim(sce, "spatial") <- normalize_obsm_matrix(x$coordinates)
   }
 
   list(

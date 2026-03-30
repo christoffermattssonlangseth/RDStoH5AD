@@ -126,6 +126,7 @@ rds2h5ad convert input.rds output.h5ad \
 - `inspect` does not require `zellkonverter`.
 - `convert` fails fast with a clear message if required R packages are missing.
 - `validate` reads the generated `.h5ad` back through `zellkonverter` and prints a compact JSON summary.
+- all exported embeddings in AnnData `obsm`, including `spatial`, are written as plain unlabeled matrices so they load back as array-like values instead of DataFrame-like tables
 - Seurat layers with incompatible dimensions, such as some `scale.data` cases, are skipped rather than densified or forced into the export.
 
 ## Repository Checklist
